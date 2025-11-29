@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2960154a878a9f6428e8ade793b57ecc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138944
+  packageName: "TSS \u2014 Visual tweener"
+  packageVersion: 1.6.33
+  assetPath: Assets/TSS/Editor/TSSEditorHerarchyModifier.cs
+  uploadId: 360956

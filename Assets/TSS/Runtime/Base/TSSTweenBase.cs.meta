@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 67b9fabb8f338d445b508d4524414a88
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138944
+  packageName: "TSS \u2014 Visual tweener"
+  packageVersion: 1.6.33
+  assetPath: Assets/TSS/Runtime/Base/TSSTweenBase.cs
+  uploadId: 360956

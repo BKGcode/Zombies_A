@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f755b1bbd2d1b3948a38a52bca70239f
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138944
+  packageName: "TSS \u2014 Visual tweener"
+  packageVersion: 1.6.33
+  assetPath: Assets/TSS/Documentation/versions(ru).txt
+  uploadId: 360956

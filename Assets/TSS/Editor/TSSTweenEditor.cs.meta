@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0f493366e90b19b43a22d110b0c62470
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138944
+  packageName: "TSS \u2014 Visual tweener"
+  packageVersion: 1.6.33
+  assetPath: Assets/TSS/Editor/TSSTweenEditor.cs
+  uploadId: 360956

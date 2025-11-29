@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1cb9192f57c472d439a68cbba489ac6a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138944
+  packageName: "TSS \u2014 Visual tweener"
+  packageVersion: 1.6.33
+  assetPath: Assets/TSS/Examples/11_Media/TSSE11_0.renderTexture
+  uploadId: 360956

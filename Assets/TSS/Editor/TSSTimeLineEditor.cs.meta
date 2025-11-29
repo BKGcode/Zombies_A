@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f2eab9915f7b5a54c9c091557eafe5e5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138944
+  packageName: "TSS \u2014 Visual tweener"
+  packageVersion: 1.6.33
+  assetPath: Assets/TSS/Editor/TSSTimeLineEditor.cs
+  uploadId: 360956
