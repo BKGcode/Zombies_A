@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8bc47fe3a232dc499011c2d7ff589a2, type: 3}
+  m_Name: DayNightProfile
+  m_EditorClassIdentifier: fps.Game::FPS.Game.Shared.DayNightProfile
+  dayTopColor: {r: 0.8, g: 0.9, b: 1, a: 1}
+  dayHorizonColor: {r: 0.47, g: 0.76, b: 1, a: 1}
+  dayBottomColor: {r: 0.3, g: 0.5, b: 0.8, a: 1}
+  nightTopColor: {r: 0.02, g: 0.02, b: 0.08, a: 1}
+  nightHorizonColor: {r: 0.05, g: 0.05, b: 0.15, a: 1}
+  nightBottomColor: {r: 0.02, g: 0.02, b: 0.05, a: 1}
