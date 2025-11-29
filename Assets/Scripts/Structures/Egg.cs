@@ -72,6 +72,13 @@ namespace GallinasFelices.Structures
 
         private void OnMouseDown()
         {
+            VFX.ClickFeedback feedback = GetComponent<VFX.ClickFeedback>();
+            if (feedback == null)
+            {
+                feedback = gameObject.AddComponent<VFX.ClickFeedback>();
+            }
+            feedback.PlayFeedback();
+            
             Collect();
         }
     }

@@ -69,5 +69,18 @@ namespace GallinasFelices.Data
         [Tooltip("Multiplier for base lifespan. Longevous = 1.5, Normal = 1.0, Fragile = 0.7")]
         [Range(0.5f, 2f)]
         public float lifespanModifier = 1f;
+
+        [Header("Locomotion Personality")]
+        [Tooltip("Pause probability during navigation (0=never, 0.5=very frequent)")]
+        [Range(0f, 0.5f)]
+        public float pauseFrequency = 0.1f;
+
+        [Tooltip("Speed variation ±X% (0.2 = ±20%)")]
+        [Range(0f, 0.5f)]
+        public float speedVariation = 0.2f;
+
+        [Tooltip("Avoidance priority (0=always evades, 99=never evades)")]
+        [Range(0, 99)]
+        public int avoidancePriority = 50;
     }
 }

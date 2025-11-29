@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using GallinasFelices.Core;
 using GallinasFelices.Data;
+using GallinasFelices.Structures;
 
 namespace GallinasFelices.Chicken
 {
@@ -34,6 +35,11 @@ namespace GallinasFelices.Chicken
         private float stateTimer;
         private Vector3 targetPosition;
         private Transform currentTarget;
+        private float baseSpeed;
+        private float pauseCooldown;
+        private bool isPaused;
+        private float speedChangeTimer;
+        private float currentSpeedMultiplier = 1f;
 
         private void Awake()
         {
@@ -44,7 +50,11 @@ namespace GallinasFelices.Chicken
             if (personality != null)
             {
                 agent.speed *= personality.walkSpeedMultiplier;
+                agent.avoidancePriority = personality.avoidancePriority;
+                agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             }
+
+            baseSpeed = agent.speed;
         }
 
         private void Start()
@@ -66,6 +76,7 @@ namespace GallinasFelices.Chicken
         {
             UpdateNeeds();
             Happiness.UpdateHappiness(Time.deltaTime, 0.1f);
+            UpdateContinuousSpeedVariation();
             UpdateStateMachine();
         }
 
@@ -119,6 +130,18 @@ namespace GallinasFelices.Chicken
 
                 case ChickenState.Exploring:
                     HandleExploringState();
+                    break;
+
+                case ChickenState.GoingToEat:
+                    HandleGoingToEatState();
+                    break;
+
+                case ChickenState.GoingToDrink:
+                    HandleGoingToDrinkState();
+                    break;
+
+                case ChickenState.GoingToSleep:
+                    HandleGoingToSleepState();
                     break;
             }
         }
@@ -239,7 +262,6 @@ namespace GallinasFelices.Chicken
             
             if (agent.remainingDistance <= arrivalThreshold)
             {
-                Debug.Log($"[{ChickenName}] Arrived at nest (remainingDistance: {agent.remainingDistance:F2}, threshold: {arrivalThreshold:F2})");
                 ChickenEggProducer producer = GetComponent<ChickenEggProducer>();
                 if (producer != null)
                 {
@@ -248,9 +270,134 @@ namespace GallinasFelices.Chicken
             }
         }
 
+        private void HandleGoingToEatState()
+        {
+            UpdateRandomPause();
+
+            if (agent.pathPending)
+            {
+                return;
+            }
+
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                ChangeState(ChickenState.Eating);
+                
+                if (personality != null)
+                {
+                    stateTimer = Random.Range(personality.minEatingDuration, personality.maxEatingDuration);
+                }
+                else
+                {
+                    stateTimer = Random.Range(4f, 8f);
+                }
+            }
+        }
+
+        private void HandleGoingToDrinkState()
+        {
+            UpdateRandomPause();
+
+            if (agent.pathPending)
+            {
+                return;
+            }
+
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                ChangeState(ChickenState.Drinking);
+                
+                if (personality != null)
+                {
+                    stateTimer = Random.Range(personality.minDrinkingDuration, personality.maxDrinkingDuration);
+                }
+                else
+                {
+                    stateTimer = Random.Range(2f, 4f);
+                }
+            }
+        }
+
+        private void HandleGoingToSleepState()
+        {
+            UpdateRandomPause();
+
+            if (agent.pathPending)
+            {
+                return;
+            }
+
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                ChangeState(ChickenState.Sleeping);
+                agent.isStopped = true;
+            }
+        }
+
+        private void UpdateRandomPause()
+        {
+            if (personality == null || !IsNavigationState(CurrentState))
+            {
+                return;
+            }
+
+            pauseCooldown -= Time.deltaTime;
+
+            if (!isPaused && pauseCooldown <= 0f)
+            {
+                float pauseChance = personality.pauseFrequency * 2f;
+                
+                if (Random.value < pauseChance)
+                {
+                    isPaused = true;
+                    pauseCooldown = Random.Range(0.8f, 2f);
+                    agent.speed = 0f;
+                }
+                else
+                {
+                    pauseCooldown = Random.Range(1f, 3f);
+                }
+            }
+            else if (isPaused && pauseCooldown <= 0f)
+            {
+                isPaused = false;
+                pauseCooldown = Random.Range(2f, 5f);
+                agent.speed = baseSpeed * currentSpeedMultiplier;
+            }
+        }
+
+        private void UpdateContinuousSpeedVariation()
+        {
+            if (!IsNavigationState(CurrentState) || personality == null || isPaused)
+            {
+                return;
+            }
+
+            speedChangeTimer -= Time.deltaTime;
+
+            if (speedChangeTimer <= 0f)
+            {
+                float variationStrength = personality.speedVariation * 0.5f;
+                float targetMultiplier = Random.Range(1f - variationStrength, 1f + variationStrength);
+                
+                if (Random.value < 0.1f)
+                {
+                    targetMultiplier *= Random.Range(1.3f, 1.6f);
+                }
+
+                currentSpeedMultiplier = Mathf.Lerp(currentSpeedMultiplier, targetMultiplier, 0.3f);
+                agent.speed = baseSpeed * currentSpeedMultiplier;
+
+                speedChangeTimer = Random.Range(0.5f, 2f);
+            }
+        }
+
         private bool ShouldHandleNeeds()
         {
-            if (CurrentState == ChickenState.GoingToNest)
+            if (CurrentState == ChickenState.GoingToNest || 
+                CurrentState == ChickenState.GoingToEat || 
+                CurrentState == ChickenState.GoingToDrink || 
+                CurrentState == ChickenState.GoingToSleep)
             {
                 return false;
             }
@@ -303,6 +450,18 @@ namespace GallinasFelices.Chicken
             return false;
         }
 
+        private void ApplyRandomSpeed()
+        {
+            if (personality == null)
+            {
+                return;
+            }
+
+            float variation = Random.Range(-personality.speedVariation, personality.speedVariation);
+            float newSpeed = baseSpeed * (1f + variation);
+            agent.speed = newSpeed;
+        }
+
         private void StartWandering()
         {
             float radius = personality != null ? personality.wanderRadius : 10f;
@@ -321,36 +480,134 @@ namespace GallinasFelices.Chicken
 
         public void TryEat()
         {
-            ChangeState(ChickenState.Eating);
-            
-            if (personality != null)
+            Structures.Feeder feeder = FindAvailableFeeder();
+            if (feeder != null)
             {
-                stateTimer = Random.Range(personality.minEatingDuration, personality.maxEatingDuration);
+                agent.SetDestination(feeder.GetFeedingPosition());
+                ChangeState(ChickenState.GoingToEat);
             }
             else
             {
-                stateTimer = Random.Range(4f, 8f);
+                stateTimer = Random.Range(2f, 5f);
+                ChangeState(ChickenState.Idle);
             }
+        }
+
+        private Structures.Feeder FindAvailableFeeder()
+        {
+            Structures.Feeder[] feeders = FindObjectsOfType<Structures.Feeder>();
+            Structures.Feeder closestFeeder = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var feeder in feeders)
+            {
+                if (feeder != null && !feeder.IsEmpty && !feeder.IsFull)
+                {
+                    StructureDurability durability = feeder.GetComponent<StructureDurability>();
+                    if (durability != null && durability.IsBroken)
+                    {
+                        continue;
+                    }
+
+                    float distance = Vector3.Distance(transform.position, feeder.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestFeeder = feeder;
+                    }
+                }
+            }
+
+            return closestFeeder;
         }
 
         public void TryDrink()
         {
-            ChangeState(ChickenState.Drinking);
-            
-            if (personality != null)
+            Structures.WaterTrough waterTrough = FindAvailableWaterTrough();
+            if (waterTrough != null)
             {
-                stateTimer = Random.Range(personality.minDrinkingDuration, personality.maxDrinkingDuration);
+                agent.SetDestination(waterTrough.GetDrinkingPosition());
+                ChangeState(ChickenState.GoingToDrink);
             }
             else
             {
-                stateTimer = Random.Range(2f, 4f);
+                stateTimer = Random.Range(2f, 5f);
+                ChangeState(ChickenState.Idle);
             }
+        }
+
+        private Structures.WaterTrough FindAvailableWaterTrough()
+        {
+            Structures.WaterTrough[] waterTroughs = FindObjectsOfType<Structures.WaterTrough>();
+            Structures.WaterTrough closestTrough = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var trough in waterTroughs)
+            {
+                if (trough != null && !trough.IsEmpty && !trough.IsFull)
+                {
+                    StructureDurability durability = trough.GetComponent<StructureDurability>();
+                    if (durability != null && durability.IsBroken)
+                    {
+                        continue;
+                    }
+
+                    float distance = Vector3.Distance(transform.position, trough.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestTrough = trough;
+                    }
+                }
+            }
+
+            return closestTrough;
         }
 
         public void GoToSleep()
         {
+            Structures.Coop coop = FindAvailableCoop();
+            if (coop != null)
+            {
+                Transform sleepingSpot = coop.AssignSpot(this);
+                if (sleepingSpot != null)
+                {
+                    agent.SetDestination(sleepingSpot.position);
+                    ChangeState(ChickenState.GoingToSleep);
+                    return;
+                }
+            }
+
             ChangeState(ChickenState.Sleeping);
             agent.isStopped = true;
+        }
+
+        private Structures.Coop FindAvailableCoop()
+        {
+            Structures.Coop[] coops = FindObjectsOfType<Structures.Coop>();
+            Structures.Coop closestCoop = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var coop in coops)
+            {
+                if (coop != null && coop.HasAvailableSpot())
+                {
+                    StructureDurability durability = coop.GetComponent<StructureDurability>();
+                    if (durability != null && durability.IsBroken)
+                    {
+                        continue;
+                    }
+
+                    float distance = Vector3.Distance(transform.position, coop.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestCoop = coop;
+                    }
+                }
+            }
+
+            return closestCoop;
         }
 
         public void TryNap()
@@ -380,6 +637,15 @@ namespace GallinasFelices.Chicken
                 return;
             }
 
+            if (CurrentState == ChickenState.Sleeping && newState != ChickenState.Sleeping)
+            {
+                Structures.Coop coop = FindObjectOfType<Structures.Coop>();
+                if (coop != null)
+                {
+                    coop.ReleaseSpot(this);
+                }
+            }
+
             CurrentState = newState;
             OnStateChanged?.Invoke(newState);
 
@@ -391,6 +657,23 @@ namespace GallinasFelices.Chicken
             {
                 agent.isStopped = false;
             }
+
+            if (IsNavigationState(newState))
+            {
+                ApplyRandomSpeed();
+                pauseCooldown = Random.Range(2f, 5f);
+                isPaused = false;
+                speedChangeTimer = Random.Range(0.5f, 1.5f);
+            }
+        }
+
+        private bool IsNavigationState(ChickenState state)
+        {
+            return state == ChickenState.Walking ||
+                   state == ChickenState.GoingToEat ||
+                   state == ChickenState.GoingToDrink ||
+                   state == ChickenState.GoingToSleep ||
+                   state == ChickenState.GoingToNest;
         }
 
         private void OnTimeOfDayChanged(TimeOfDay timeOfDay)

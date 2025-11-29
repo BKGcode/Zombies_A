@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5669391924922609658}
   - component: {fileID: 6514926534072337034}
   - component: {fileID: 1904246445849239657}
+  - component: {fileID: -4485269282985769321}
   m_Layer: 9
   m_Name: Feeder
   m_TagString: Untagged
@@ -93,7 +94,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2707f42c5088f444ba8a41d8e8a1c1f5, type: 2}
+  - {fileID: 2100002, guid: b121577100373491d839adcc51d30452, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -192,6 +193,21 @@ MonoBehaviour:
   structureType: 0
   currentDurability: 100
   isBroken: 0
+--- !u!114 &-4485269282985769321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4627419850262596711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b74bb80ec521f49a70af7d51622950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.ClickFeedback
+  squashAmount: 0.85
+  stretchAmount: 1.15
+  duration: 0.2
 --- !u!1 &7667247131743534893
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4207751603441360852}
   - component: {fileID: 4268931770880035111}
   - component: {fileID: 1471317200657601535}
+  - component: {fileID: 5951185702341371020}
+  - component: {fileID: 6888836197816847951}
   m_Layer: 0
   m_Name: PFB_Egg
   m_TagString: Untagged
@@ -63,6 +65,36 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &5951185702341371020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7115234746025612032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ab71233f324e14e80c18b82be7e2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.SpawnEffect
+  preset: {fileID: 11400000, guid: 69b18730cf6611b4287b2d045a208caa, type: 2}
+  playOnStart: 1
+  visualRoot: {fileID: 1004495967220889962}
+--- !u!114 &6888836197816847951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7115234746025612032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b74bb80ec521f49a70af7d51622950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.ClickFeedback
+  squashAmount: 0.85
+  stretchAmount: 1.15
+  duration: 0.2
 --- !u!1 &8117933935185435993
 GameObject:
   m_ObjectHideFlags: 0

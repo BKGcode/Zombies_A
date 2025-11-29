@@ -37,3 +37,7 @@ MonoBehaviour:
   maxDrinkingDuration: 4
   minLayingEggDuration: 4
   maxLayingEggDuration: 7
+  lifespanModifier: 1
+  pauseFrequency: 0.35
+  speedVariation: 0.6
+  avoidancePriority: 75

@@ -16,6 +16,9 @@ GameObject:
   - component: {fileID: 5210154349362174771}
   - component: {fileID: 8475314465934932441}
   - component: {fileID: 8337074751215077636}
+  - component: {fileID: 4958442973848362522}
+  - component: {fileID: 5323048600559269699}
+  - component: {fileID: -7330575692804611288}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -57,7 +60,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -182,3 +185,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.Chicken.ChickenLifespan
   gameBalance: {fileID: 11400000, guid: 30866ed9e2d946f4eb11ffb12945d93f, type: 2}
+--- !u!114 &4958442973848362522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807238285783409255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ab71233f324e14e80c18b82be7e2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.SpawnEffect
+  preset: {fileID: 11400000, guid: 48daa85d2215b53409d229a292f1798e, type: 2}
+  playOnStart: 1
+  visualRoot: {fileID: 0}
+--- !u!114 &5323048600559269699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807238285783409255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ade92ca2a1fa77445a17660566eae9d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.ChickenPeckingBehavior
+  peckAngle: 45
+  peckDuration: 0.3
+  minPecks: 2
+  maxPecks: 4
+--- !u!114 &-7330575692804611288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807238285783409255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b74bb80ec521f49a70af7d51622950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.ClickFeedback
+  squashAmount: 0.85
+  stretchAmount: 1.15
+  duration: 0.2

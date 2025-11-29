@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 2117582541715362460}
   - component: {fileID: 4973729075383063511}
   - component: {fileID: 8118123423682734561}
+  - component: {fileID: 4951991972634760261}
   m_Layer: 9
   m_Name: Coop
   m_TagString: Untagged
@@ -199,6 +200,21 @@ MonoBehaviour:
   structureType: 0
   currentDurability: 100
   isBroken: 0
+--- !u!114 &4951991972634760261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743869993740944845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b74bb80ec521f49a70af7d51622950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.ClickFeedback
+  squashAmount: 0.85
+  stretchAmount: 1.15
+  duration: 0.2
 --- !u!1 &1826180659977236455
 GameObject:
   m_ObjectHideFlags: 0

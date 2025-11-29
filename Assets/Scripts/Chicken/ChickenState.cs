@@ -8,6 +8,9 @@ namespace GallinasFelices.Chicken
         Drinking,
         Sleeping,
         GoingToNest,
+        GoingToEat,
+        GoingToDrink,
+        GoingToSleep,
         LayingEgg,
         Exploring,
         DustBathing

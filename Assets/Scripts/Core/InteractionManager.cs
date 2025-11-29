@@ -44,6 +44,13 @@ namespace GallinasFelices.Core
                 IInteractable interactable = hit.collider.GetComponent<IInteractable>();
                 if (interactable != null)
                 {
+                    VFX.ClickFeedback feedback = hit.collider.GetComponent<VFX.ClickFeedback>();
+                    if (feedback == null)
+                    {
+                        feedback = hit.collider.gameObject.AddComponent<VFX.ClickFeedback>();
+                    }
+                    feedback.PlayFeedback();
+
                     PanelLane lane = DetermineLane(interactable);
                     
                     if (PanelManager.Instance != null)

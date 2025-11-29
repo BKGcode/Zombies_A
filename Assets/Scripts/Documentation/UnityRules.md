@@ -12,6 +12,7 @@ description: 'Reglas obligatorias para TODA generación, modificación y refacto
 - Nunca cambies el código original cuando te pida analizar un script. Analizar significa revisar su estructura, entender sus responsabilidades y señalar mejoras o problemas, teniendo en cuenta las relgas aquí descritas, sin modificar nada.
 - Por defecto los nuevos scripts se generan en Assets/_Project/Scripts y los shaders en Assets/_Project/Shaders.
 - Cada vez que quieras aplicar un cambio o crear nuevo código, plantea al menos 3 maneras de abordarlo y elige la más simple y eficiente.
+- Evita ser demasiado expeditivo. No me expliques cada detalle, resume conclusiones y acciones.
 
 
 C# Coding Style:
