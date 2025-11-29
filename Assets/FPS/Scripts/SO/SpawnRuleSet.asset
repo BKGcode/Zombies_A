@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a7ca5b7df4e85c49a1276787fd32911, type: 3}
+  m_Name: SpawnRuleSet
+  m_EditorClassIdentifier: fps.AI::FPS.Spawning.SpawnRuleSet
+  DripPerMinuteDay: 1
+  DripPerMinuteNight: 4
+  MaxConcurrentGlobal: 40
+  DailyBudget: 120
+  DailyScalePercent: 15
+  WaveWindows:
+  - Name: Noche - Oleadas
+    StartHour: 20
+    EndHour: 5
+    MinWaveSize: 3
+    MaxWaveSize: 6
+    IntervalMinutes: 10
+    PeriodAllowed: 0
+  Enemies:
+  - Prefab: {fileID: 4833132447965803369, guid: 61bdf3075432c9742b414daca569e63e,
+      type: 3}
+    EnemyType: {fileID: 11400000, guid: 2d8cf1ff7d78b614d80ba051205e5717, type: 2}
+    Weight: 0
+    WeightJitterPercent: 0
+    AllowedPeriod: 0
+  UseCustomSeed: 0
+  RandomSeed: 12345
