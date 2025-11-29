@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66d3fb64d4066e64981611f3fa0950f6, type: 3}
+  m_Name: ChickenType_C
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.Data.ChickenPersonalitySO
+  personalityType: 2
+  displayName: 
+  description: 
+  walkSpeedMultiplier: 1.124
+  idleTimeMultiplier: 0.872
+  sociabilityLevel: 0.5
+  curiosityLevel: 0.5
+  minEggProductionTime: 15
+  maxEggProductionTime: 20
+  happinessMultiplier: 1
+  exploreChance: 0.3
+  dustBathChance: 0.2
+  wanderRadius: 10
+  minWanderTime: 2
+  maxWanderTime: 5
+  minIdleTime: 1
+  maxIdleTime: 4
+  minWaitAfterWalk: 2
+  maxWaitAfterWalk: 6
+  minEatingDuration: 4
+  maxEatingDuration: 8
+  minDrinkingDuration: 2
+  maxDrinkingDuration: 4
+  minLayingEggDuration: 4
+  maxLayingEggDuration: 7

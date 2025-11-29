@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d8875009ac1ef4291d1395311333aa, type: 3}
+  m_Name: GameBalance
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.Data.GameBalanceSO
+  eggValue: 1
+  happinessDecayRate: 0.1
+  happinessFromFood: 10
+  happinessFromWater: 10
+  happinessFromShadow: 5
+  happinessFromSleep: 15
+  hungerIncreaseRate: 1
+  thirstIncreaseRate: 1.2
+  energyDecreaseRate: 0.8
+  feederCapacity: 100
+  waterTroughCapacity: 100
+  consumptionPerUse: 5
+  chickenBaseCost: 5
+  feederUpgradeCost: 30
+  autoCollectorCost: 100
+  feederRepairCost: 20
+  waterTroughRepairCost: 20
+  nestRepairCost: 15
+  coopRepairCost: 50
+  feederRefillCost: 10
+  waterTroughRefillCost: 10
+  structureTimeDecayRate: 1
+  structureUseDecayAmount: 0.1
+  autoRepairThreshold: 30
+  autoRefillThreshold: 20
+  coopCapacity: 5
+  coopRange: 3
+  eggAutoCollectTime: 10
+  secondsPerGameHour: 10
+  startHour: 6
+  morningStart: 6
+  dayStart: 10.5
+  afternoonStart: 17.699999
+  nightStart: 0
+  nightIntensity: 0.1
+  dayIntensity: 1
+  feedingRange: 2
+  drinkingRange: 2
+  neglectDeathTimeSeconds: 120
+  dayNightRatio: 3
+  lightColorGradient:
+    serializedVersion: 2
+    key0: {r: 0.101960786, g: 0.101960786, b: 0.2509804, a: 1}
+    key1: {r: 1, g: 0.41960785, b: 0.20784314, a: 1}
+    key2: {r: 1, g: 1, b: 1, a: 0}
+    key3: {r: 1, g: 0.3882353, b: 0.2784314, a: 0}
+    key4: {r: 0.101960786, g: 0.101960786, b: 0.2509804, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 16384
+    ctime2: 32768
+    ctime3: 49151
+    ctime4: 65535
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 5
+    m_NumAlphaKeys: 2
+  daySkybox: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  nightSkybox: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  napEnergyThreshold: 50
+  sleepOutsideLifespanPenalty: 0.05

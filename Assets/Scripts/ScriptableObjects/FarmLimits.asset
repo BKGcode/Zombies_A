@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda55b6e1c2ab96438c77b9b4f5fc374, type: 3}
+  m_Name: FarmLimits
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.Data.FarmLimitsSO
+  chickensPerNest: 5
+  chickensPerFeeder: 10
+  chickensPerWaterTrough: 10
+  maxNests: 10
+  maxFeeders: 5
+  maxWaterTroughs: 5
