@@ -70,6 +70,23 @@ namespace GallinasFelices.Data
         [Range(0.5f, 2f)]
         public float lifespanModifier = 1f;
 
+        [Header("Sleep Thresholds (Anti-Robotic)")]
+        [Tooltip("Rango de energía mínima para considerar dormir")]
+        [Range(10f, 50f)]
+        public float sleepEnergyThresholdMin = 20f;
+        
+        [Tooltip("Rango de energía máxima para considerar dormir")]
+        [Range(50f, 80f)]
+        public float sleepEnergyThresholdMax = 60f;
+        
+        [Tooltip("Rango de energía mínima para despertar")]
+        [Range(70f, 90f)]
+        public float wakeEnergyThresholdMin = 75f;
+        
+        [Tooltip("Rango de energía máxima para despertar")]
+        [Range(90f, 100f)]
+        public float wakeEnergyThresholdMax = 95f;
+
         [Header("Locomotion Personality")]
         [Tooltip("Pause probability during navigation (0=never, 0.5=very frequent)")]
         [Range(0f, 0.5f)]
@@ -82,5 +99,37 @@ namespace GallinasFelices.Data
         [Tooltip("Avoidance priority (0=always evades, 99=never evades)")]
         [Range(0, 99)]
         public int avoidancePriority = 50;
+
+        [Header("Organic Movement (Anti-Robot)")]
+        [Tooltip("Frequency of path deviation (0=straight line, 1=constant zigzag)")]
+        [Range(0f, 1f)]
+        public float pathDeviationFrequency = 0.3f;
+
+        [Tooltip("Maximum lateral offset from straight path (meters)")]
+        [Range(0.5f, 3f)]
+        public float maxPathDeviation = 1.5f;
+
+        [Tooltip("How abruptly speed changes (0=smooth easing, 1=instant)")]
+        [Range(0f, 1f)]
+        public float speedChangeAbruptness = 0.7f;
+
+        [Tooltip("Add intermediate waypoints to paths (makes them less direct)")]
+        public bool useIndirectPaths = true;
+
+        [Tooltip("Number of detour waypoints when navigating (0-3)")]
+        [Range(0, 3)]
+        public int maxDetourWaypoints = 1;
+
+        [Header("Rotation Behavior")]
+        [Tooltip("Angular speed for turning (degrees/sec). Higher = snappier rotation")]
+        [Range(120f, 1080f)]
+        public float rotationSpeed = 540f;
+
+        [Tooltip("Stop moving while rotating to target direction")]
+        public bool stopWhileRotating = true;
+
+        [Tooltip("Minimum angle difference to trigger stop-and-rotate (degrees)")]
+        [Range(30f, 90f)]
+        public float minAngleToStopRotating = 45f;
     }
 }

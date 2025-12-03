@@ -89,7 +89,8 @@ namespace GallinasFelices.Chicken
                 return;
             }
 
-            if (chicken.CurrentState == ChickenState.GoingToNest)
+            if (chicken.CurrentState == ChickenState.GoingToNest || 
+                chicken.CurrentState == ChickenState.LayingEgg)
             {
                 return;
             }
@@ -119,22 +120,23 @@ namespace GallinasFelices.Chicken
             {
                 waitingForNest = false;
                 float distance = Vector3.Distance(transform.position, nest.transform.position);
-                Debug.Log($"[{chicken.ChickenName}] Found available nest at {distance:F2}m. Going to lay egg.");
+                chicken.GetComponent<HappyChickens.Debug.ChickenDebugger>()?.LogEvent("EggProduction", $"Found nest at {distance:F2}m. Going to lay egg", HappyChickens.Debug.EventSeverity.Info);
                 
                 currentNest = nest;
                 currentNest.TryOccupy();
                 
+                chicken.ChangeState(ChickenState.GoingToNest);
+                
                 if (agent != null)
                 {
                     agent.SetDestination(currentNest.transform.position);
-                    chicken.ChangeState(ChickenState.GoingToNest);
                 }
             }
             else
             {
                 if (!waitingForNest)
                 {
-                    Debug.Log($"[{chicken.ChickenName}] No available nests. Will retry every {retryDelay}s while continuing normal behavior.");
+                    chicken.GetComponent<HappyChickens.Debug.ChickenDebugger>()?.LogEvent("EggProduction", $"No available nests. Will retry every {retryDelay}s", HappyChickens.Debug.EventSeverity.Warning);
                 }
                 
                 waitingForNest = true;
@@ -144,10 +146,23 @@ namespace GallinasFelices.Chicken
 
         public void OnReachedNest()
         {
-            Debug.Log($"[{chicken.ChickenName}] Reached nest! Starting to lay egg.");
+            chicken.GetComponent<HappyChickens.Debug.ChickenDebugger>()?.LogEvent("EggProduction", "Reached nest. Starting to lay egg", HappyChickens.Debug.EventSeverity.Info);
             chicken.StartLayingEgg();
             OnProductionStarted?.Invoke();
             chicken.OnStateChanged.AddListener(OnChickenStateChanged);
+        }
+
+        public void CancelEggProduction()
+        {
+            if (currentNest != null)
+            {
+                chicken.GetComponent<HappyChickens.Debug.ChickenDebugger>()?.LogEvent("EggProduction", "Egg production cancelled. Releasing nest", HappyChickens.Debug.EventSeverity.Warning);
+                currentNest.Release();
+                currentNest = null;
+            }
+            
+            waitingForNest = false;
+            ResetProductionTimer();
         }
 
         private void OnChickenStateChanged(ChickenState newState)

@@ -68,9 +68,10 @@ namespace GallinasFelices.Core
         {
             CurrentHour += (Time.deltaTime / gameBalance.secondsPerGameHour);
 
-            if (CurrentHour >= 24f)
+            while (CurrentHour >= 24f)
             {
-                CurrentHour = 0f;
+                CurrentHour -= 24f;
+                UpdateTimeOfDay();
             }
 
             UpdateTimeOfDay();

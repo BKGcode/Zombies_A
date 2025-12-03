@@ -133,5 +133,13 @@ namespace HappyChickens.Debug
         {
             AssignedWaterTrough = troughName;
         }
+
+        public void LogEvent(string eventType, string message, EventSeverity severity = EventSeverity.Info)
+        {
+            if (ChickenMonitorManager.Instance != null)
+            {
+                ChickenMonitorManager.Instance.LogEvent(ChickenID, eventType, message, severity);
+            }
+        }
     }
 }

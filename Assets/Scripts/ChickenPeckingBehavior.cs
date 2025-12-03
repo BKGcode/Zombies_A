@@ -46,7 +46,9 @@ namespace GallinasFelices
         {
             if (visualRoot == null) return;
             
-            if (chicken.CurrentState == ChickenState.LayingEgg)
+            if (chicken.CurrentState == ChickenState.LayingEgg || 
+                chicken.CurrentState == ChickenState.Sleeping ||
+                chicken.CurrentState == ChickenState.GoingToSleep)
             {
                 if (isPecking) StopPecking();
                 return;

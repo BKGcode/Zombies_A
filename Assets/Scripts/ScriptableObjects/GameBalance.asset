@@ -21,8 +21,6 @@ MonoBehaviour:
   hungerIncreaseRate: 1
   thirstIncreaseRate: 1.2
   energyDecreaseRate: 0.8
-  feederCapacity: 100
-  waterTroughCapacity: 100
   consumptionPerUse: 5
   chickenBaseCost: 5
   feederUpgradeCost: 30
@@ -37,7 +35,6 @@ MonoBehaviour:
   structureUseDecayAmount: 0.1
   autoRepairThreshold: 30
   autoRefillThreshold: 20
-  coopCapacity: 5
   coopRange: 3
   eggAutoCollectTime: 10
   secondsPerGameHour: 10
@@ -85,4 +82,7 @@ MonoBehaviour:
   daySkybox: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   nightSkybox: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   napEnergyThreshold: 50
-  sleepOutsideLifespanPenalty: 0.05
+  sleepOutsideLifespanPenalty: 0.01
+  sleepOutsideEnergyPenalty: 1.05
+  coopDestroyedScatterRadius: 8
+  coopDestroyedScatterForce: 1

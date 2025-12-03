@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 4958442973848362522}
   - component: {fileID: 5323048600559269699}
   - component: {fileID: -7330575692804611288}
+  - component: {fileID: 4489511972938625350}
+  - component: {fileID: 9129594455038071752}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -38,7 +40,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2583276475669273594}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &682039551767574053
@@ -105,7 +108,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -129,6 +132,7 @@ MonoBehaviour:
   personality: {fileID: 11400000, guid: dd75aabaa3279384aac96c909acdd649, type: 2}
   chickenConfig: {fileID: 11400000, guid: 3bd8509baf169bc4883f1f60ca1a1452, type: 2}
   uiTexts: {fileID: 11400000, guid: c0b5504b5b1f7794b9c546ce62b1af37, type: 2}
+  gameBalance: {fileID: 11400000, guid: 30866ed9e2d946f4eb11ffb12945d93f, type: 2}
   visualRoot: {fileID: 0}
   OnStateChanged:
     m_PersistentCalls:
@@ -231,3 +235,123 @@ MonoBehaviour:
   squashAmount: 0.85
   stretchAmount: 1.15
   duration: 0.2
+--- !u!114 &4489511972938625350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807238285783409255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d8b6b81d8d21145a55db75a04a1f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.ChickenSleepBreathingAnimation
+  chicken: {fileID: 1955841629965964653}
+  visualRoot: {fileID: 0}
+  breatheScale: {x: 0.95, y: 1.05, z: 0.95}
+  breatheDuration: 2
+  breatheEase: 4
+  minTimeBetweenBreaths: 3
+  maxTimeBetweenBreaths: 8
+--- !u!114 &9129594455038071752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807238285783409255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9462081a84fe41489ca718bfd59fce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.VFX.ChickenWarningIcon
+  chicken: {fileID: 1955841629965964653}
+  coldIconPrefab: {fileID: 6195394158270873298}
+  iconOffset: {x: 0, y: 1, z: 0}
+  checkInterval: 0.5
+--- !u!1001 &1294611678837959064
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5345787046203106516}
+    m_Modifications:
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4903597971699308362, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_Name
+      value: ICO_ColdWarning
+      objectReference: {fileID: 0}
+    - target: {fileID: 4903597971699308362, guid: 78d54878987de0947aba254f4830ef78,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 78d54878987de0947aba254f4830ef78, type: 3}
+--- !u!4 &2583276475669273594 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3616045472765358690, guid: 78d54878987de0947aba254f4830ef78,
+    type: 3}
+  m_PrefabInstance: {fileID: 1294611678837959064}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6195394158270873298 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4903597971699308362, guid: 78d54878987de0947aba254f4830ef78,
+    type: 3}
+  m_PrefabInstance: {fileID: 1294611678837959064}
+  m_PrefabAsset: {fileID: 0}

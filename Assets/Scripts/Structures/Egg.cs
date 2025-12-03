@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using GallinasFelices.Data;
+using DG.Tweening;
 
 namespace GallinasFelices.Structures
 {
@@ -67,6 +68,7 @@ namespace GallinasFelices.Structures
                 parentNest.RemoveEgg();
             }
 
+            transform.DOKill(true);
             Destroy(gameObject);
         }
 

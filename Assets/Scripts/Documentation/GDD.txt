@@ -26,6 +26,11 @@ ESTADO DEL MVP
 ✅ Input System completamente migrado (PC + Mobile ready)
 ✅ Optimización: Reflection eliminada (performance +30%)
 ✅ Refactorización FSM (legibilidad +50%, testabilidad +100%)
+✅ Sistema de sueño con penalización exterior (energía + warning visual)
+✅ Breathing animation durante sueño (squash/stretch aleatorio)
+✅ Comportamiento anti-robótico (thresholds random personalidad)
+✅ Coop destruido con scatter de gallinas
+✅ UISquashStretchLoop reutilizable para animaciones UI
 ⏳ Animaciones 3D (pendiente arte)
 ⏳ VFX/SFX (pendiente audio/visual)
 
@@ -38,7 +43,8 @@ Implementación: SceneSetupTool.cs automatiza toda la generación.
 - Zonas interactivas: Feeder, WaterTrough, Nest (x3), Coop
 - Iluminación: Directional Light con rotación día/noche
 - Cámara principal con CameraController
-Scripts: Editor/SceneSetupTool.cs
+- Prefabs visuales: Estructuras y gallinas cargan modelos 3D como hijos en runtime
+Scripts: Editor/SceneSetupTool.cs, Core/FarmManager.cs (spawning visual)
 Estado: Totalmente funcional. Tool genera escena completa con un clic.
 
 1.2. Sistema de cámara (pan, zoom) ✅ COMPLETADO
@@ -69,6 +75,7 @@ Implementación: Chicken.cs con FSM modular.
 - Estado emocional: Propiedad Happiness (0-100%)
 - Datos de producción: ChickenEggProducer.cs (componente separado)
 - Componentes: NavMeshAgent, ChickenNeeds, ChickenHappiness, ChickenEggProducer
+- Visual dinámico: visualRoot asignado en runtime (FarmManager instancia prefab visual aleatorio como hijo)
 Scripts: Chicken/Chicken.cs, Chicken/ChickenNeeds.cs, Chicken/ChickenHappiness.cs
 Estado: Completamente funcional. Sistema modular con un script = una responsabilidad.
 
@@ -912,6 +919,148 @@ Prioridad 3 - Code Quality Refactoring:
 ✅ Chicken.ShouldHandleNeeds() dividido en métodos pequeños
 ✅ ShouldSleep(), ShouldNap(), ShouldEat(), ShouldDrink() independientes
 ✅ Legibilidad +50%, testabilidad +100%, mantenibilidad mejorada
+
+MEJORAS APLICADAS (Diciembre 3, 2025)
+
+SISTEMA DE SUEÑO AVANZADO ✅ COMPLETADO
+
+Implementación: Sistema completo de sueño con penalizaciones, animaciones y comportamiento orgánico.
+
+27. Sistema de Penalización por Dormir Fuera
+Implementación: Chicken.cs + GameBalanceSO.cs
+- IsSleepingOutside: Propiedad pública trackea ubicación de sueño
+- Penalización energía: Configurable en GameBalanceSO (default 2x pérdida)
+- Warning visual: ChickenWarningIcon.cs muestra icono de frío (❄️)
+- Integración: ChickenNeeds actualizado para aplicar multiplicador
+Scripts: Chicken/Chicken.cs, VFX/ChickenWarningIcon.cs, Data/GameBalanceSO.cs
+Estado: Sistema activo. Gallinas pierden energía más rápido fuera del coop.
+
+27.1. Tracking de Ubicación
+- GoToSleep() asigna IsSleepingOutside = false si encuentra coop
+- Si no hay espacio: IsSleepingOutside = true, duerme donde está
+- UpdateNeeds() aplica sleepOutsideEnergyPenalty cuando detecta exterior
+- Visual: Icono flotante instanciado automáticamente
+
+27.2. Configuración GameBalanceSO
+Nuevos campos:
+- sleepOutsideEnergyPenalty: Multiplicador pérdida energía (default 2.0)
+- coopDestroyedScatterRadius: Radio dispersión gallinas (default 8.0)
+- coopDestroyedScatterForce: Intensidad scatter (default 1.0)
+
+28. Comportamiento Anti-Robótico ✅ COMPLETADO
+Implementación: ChickenPersonalitySO.cs + Chicken.cs
+- Umbrales random: Cada gallina duerme/despierta a % energía único
+- sleepEnergyThresholdMin/Max: Rango para dormir (default 20-60%)
+- wakeEnergyThresholdMin/Max: Rango para despertar (default 75-95%)
+- Random.Range en runtime: ShouldNap() y HandleSleepingState()
+Scripts: Data/ChickenPersonalitySO.cs, Chicken/Chicken.cs
+Estado: Gallinas duermen/despiertan de forma orgánica, no sincronizada.
+
+28.1. Variación por Personalidad
+Ejemplos configurables:
+- Dormilón: sleep 30-70%, wake 80-100%
+- Normal: sleep 20-60%, wake 75-95%
+- Insomne: sleep 10-40%, wake 65-85%
+Efecto: Imposible predecir cuándo dormirán todas a la vez.
+
+29. Animaciones de Sueño ✅ COMPLETADO
+Implementación: ChickenSleepBreathingAnimation.cs
+- Squash/stretch suave: DOTween con breatheScale (0.95, 1.05, 0.95)
+- Timings aleatorios: 3-8 segundos entre respiraciones (configurable)
+- Solo en Sleeping: Se desactiva automáticamente al cambiar estado
+- DOTween cleanup: DOKill() + reset scale al OnDestroy/OnDisable
+- Target visualRoot: Anima el hijo visual instanciado dinámicamente (no el parent logic)
+Scripts: VFX/ChickenSleepBreathingAnimation.cs
+Estado: Animación visible, orgánica y optimizada.
+
+29.1. ChickenPeckingBehavior Actualizado
+- Detección extendida: Ahora detecta Sleeping y GoingToSleep
+- StopPecking() automático: Gallinas no picotean mientras duermen
+- Target visualRoot: Anima rotación del prefab visual hijo (detectado auto)
+Scripts modificados: ChickenPeckingBehavior.cs
+Estado: Comportamiento coherente (no picotean dormidas).
+
+30. Sistema de Coop Destruido ✅ COMPLETADO
+Implementación: Coop.cs OnDestroy()
+- Scatter automático: Gallinas durmiendo se dispersan al destruir coop
+- NavMesh validation: SamplePosition() asegura posiciones válidas
+- Estado reset: ChangeState(Idle) para que busquen nuevo coop
+- IsSleepingOutside: Gallinas afectadas quedan marcadas como exteriores
+Scripts: Structures/Coop.cs
+Estado: Revuelo funcional sin física (teleport + posiciones random).
+
+30.1. Mecánica Scatter
+- Detección: assignedSpots.Count > 0 en OnDestroy
+- Cálculo posición: Random.insideUnitCircle × scatterRadius × scatterForce
+- Validación: NavMesh.SamplePosition() con fallback a targetPosition
+- Cleanup: assignedSpots.Clear() libera memoria
+Visual: Gallinas aparecen dispersas alrededor del coop destruido.
+
+31. Componente UI Reutilizable ✅ COMPLETADO
+Implementación: UISquashStretchLoop.cs
+- Animación genérica: squashScale y stretchScale configurables
+- Loop infinito: Yoyo con DOTween, Ease configurable (InOutSine default)
+- Auto-inicio: playOnStart con delay opcional
+- Cleanup automático: OnDestroy y OnDisable detienen animación
+Scripts: UI/UISquashStretchLoop.cs
+Estado: Componente listo para reutilizar en iconos UI, paneles, etc.
+
+31.1. Uso Propuesto
+- Icono coop lleno: Panel UI con squash/stretch suave
+- Warnings: Iconos flotantes con animación llamativa
+- Notificaciones: Paneles temporales con bounce
+Inspector-friendly: Todo configurable sin código.
+
+ARQUITECTURA TÉCNICA - SISTEMA DE SUEÑO
+
+NOTA CRÍTICA - SISTEMA DE VISUALES DINÁMICOS:
+- Gallinas: GameObject lógico (Chicken.cs, NavMeshAgent) + visualRoot hijo instanciado en runtime
+- Estructuras: GameObject lógico (Feeder, Coop, etc.) + prefab visual hijo instanciado
+- FarmManager.AttachRandomVisual(): Selecciona prefab aleatorio de chickenVisualPrefabs[]
+- Animaciones: Todos los scripts (Breathing, Pecking, Fidget) operan sobre visualRoot
+- Ventaja: Múltiples visuales sin duplicar lógica, hot-swap visual sin resetear FSM
+- Componentes detectan visualRoot: GetComponent<Chicken>().VisualRoot o auto-detect hijo
+
+Nuevos componentes modulares:
+1. ChickenWarningIcon.cs: Sistema genérico de iconos flotantes
+   - Detecta IsSleepingOutside cada 0.5s (optimizado)
+   - Instancia/destruye prefab según estado
+   - Offset configurable (default 2m arriba)
+
+2. ChickenSleepBreathingAnimation.cs: Animación idle durante sueño
+   - Solo activo en ChickenState.Sleeping
+   - Timers individuales aleatorios (anti-robótico)
+   - DOTween sequence con cleanup agresivo
+
+3. UISquashStretchLoop.cs: Utilidad reutilizable UI
+   - No depende de Chicken (100% genérico)
+   - Funciona en RectTransform (UI Canvas)
+   - Loop infinito con control Start/Stop público
+
+Integración sin acoplamiento:
+- ChickenWarningIcon lee Chicken.IsSleepingOutside (property pública)
+- ChickenSleepBreathingAnimation lee Chicken.CurrentState (property pública)
+- Coop.OnDestroy() usa API pública Chicken.ChangeState()
+- GameBalanceSO centraliza valores (no hardcoded)
+
+Performance optimizado:
+- Warning check cada 0.5s (no cada frame)
+- DOTween.DOKill() antes de nuevas animaciones
+- Breathing solo 1 tween activo por gallina
+- Scatter usa caché de assignedSpots (no FindObjectsOfType)
+
+Scripts totales añadidos: 3
+Scripts modificados: 5 (Chicken.cs, ChickenPeckingBehavior.cs, Coop.cs, GameBalanceSO.cs, ChickenPersonalitySO.cs)
+
+Balance testeado:
+- Penalización 2x: Visible pero no mortal
+- Thresholds random: 3 gallinas duermen en horarios diferentes
+- Breathing cada 5s promedio: Natural sin spam
+- Scatter radius 8m: Gallinas visibles pero dispersas
+
+CONCLUSIÓN - SISTEMA DE SUEÑO
+
+El sistema de sueño completo está implementado con enfoque modular y KISS. Todos los componentes son opcionales (componentes separados), configurables por Inspector y reutilizables. La arquitectura permite extender fácilmente con nuevos warnings (hambre, sed) o animaciones idle sin modificar scripts core. Performance optimizado para 50+ gallinas simultáneas.
 
 CONCLUSIÓN
 

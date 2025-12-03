@@ -14,6 +14,8 @@ namespace GallinasFelices.Structures
         {
             if (other.TryGetComponent<Chicken.Chicken>(out var chicken))
             {
+                chicken.GetComponent<HappyChickens.Debug.ChickenDebugger>()?.LogEvent("Drinking", $"Entered water trough trigger. State:{chicken.CurrentState} Capacity:{CurrentCapacity:F0}", HappyChickens.Debug.EventSeverity.Info);
+                
                 if (chicken.CurrentState == ChickenState.Drinking && !IsEmpty)
                 {
                     if (TryStartUsing())

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using GallinasFelices.Core;
 using GallinasFelices.Data;
 
@@ -10,11 +11,11 @@ namespace GallinasFelices.Structures
         [Header("References")]
         [SerializeField] private GameBalanceSO gameBalance;
         [SerializeField] private UITextsConfigSO uiTexts;
-        [SerializeField] private List<Transform> sleepingSpots = new List<Transform>();
+        [SerializeField] private Transform entryPoint;
         [SerializeField] private CoopConfigSO currentConfig;
         [SerializeField] private MeshRenderer meshRenderer;
 
-        private Dictionary<Chicken.Chicken, Transform> assignedSpots = new Dictionary<Chicken.Chicken, Transform>();
+        private HashSet<Chicken.Chicken> chickensInside = new HashSet<Chicken.Chicken>();
 
         private void Start()
         {
@@ -22,49 +23,61 @@ namespace GallinasFelices.Structures
             {
                 Debug.LogWarning("[Coop] GameBalanceSO not assigned!");
             }
+
+            if (entryPoint == null)
+            {
+                Debug.LogWarning("[Coop] Entry point not assigned! Using coop position as fallback.");
+            }
         }
 
         public bool HasAvailableSpot()
         {
-            int maxCapacity = GetMaxCapacity();
-            return assignedSpots.Count < maxCapacity && assignedSpots.Count < sleepingSpots.Count;
+            return chickensInside.Count < GetMaxCapacity();
         }
 
         private int GetMaxCapacity()
         {
             if (currentConfig != null) return currentConfig.sleepingSpots;
-            return 15; // Default fallback
+            return 15;
         }
 
-        public Transform AssignSpot(Chicken.Chicken chicken)
+        public Transform GetEntryPoint()
         {
-            if (assignedSpots.ContainsKey(chicken))
-            {
-                return assignedSpots[chicken];
-            }
+            return entryPoint != null ? entryPoint : transform;
+        }
 
-            if (!HasAvailableSpot())
+        private void OnTriggerEnter(Collider other)
+        {
+            Chicken.Chicken chicken = other.GetComponent<Chicken.Chicken>();
+            if (chicken != null && !chickensInside.Contains(chicken))
             {
-                return null;
-            }
-
-            foreach (var spot in sleepingSpots)
-            {
-                if (!assignedSpots.ContainsValue(spot))
+                chickensInside.Add(chicken);
+                
+                if (chicken.CurrentState == Chicken.ChickenState.GoingToSleep)
                 {
-                    assignedSpots[chicken] = spot;
-                    return spot;
+                    HideChickenWithAnimation(chicken);
                 }
             }
-
-            return null;
         }
 
-        public void ReleaseSpot(Chicken.Chicken chicken)
+        private void OnTriggerExit(Collider other)
         {
-            if (assignedSpots.ContainsKey(chicken))
+            Chicken.Chicken chicken = other.GetComponent<Chicken.Chicken>();
+            if (chicken != null && chickensInside.Contains(chicken))
             {
-                assignedSpots.Remove(chicken);
+                chickensInside.Remove(chicken);
+                chicken.ShowVisual();
+            }
+        }
+
+        private void HideChickenWithAnimation(Chicken.Chicken chicken)
+        {
+            Transform visualRoot = chicken.GetVisualRoot();
+            if (visualRoot != null && visualRoot.gameObject.activeSelf)
+            {
+                visualRoot.DOScale(Vector3.zero, 0.3f)
+                    .SetEase(Ease.InBack)
+                    .OnComplete(() => visualRoot.gameObject.SetActive(false));
             }
         }
 
@@ -82,18 +95,13 @@ namespace GallinasFelices.Structures
                 Gizmos.DrawWireSphere(transform.position, gameBalance.coopRange);
             }
 
-            if (sleepingSpots != null)
+            if (entryPoint != null)
             {
                 Gizmos.color = Color.cyan;
-                foreach (var spot in sleepingSpots)
-                {
-                    if (spot != null)
-                    {
-                        Gizmos.DrawWireSphere(spot.position, 0.3f);
-                    }
-                }
+                Gizmos.DrawWireSphere(entryPoint.position, 0.5f);
             }
         }
+
         public string GetTitle()
         {
             return uiTexts != null ? uiTexts.coopTitle : string.Empty;
@@ -112,7 +120,7 @@ namespace GallinasFelices.Structures
             StructureDurability durability = GetComponent<StructureDurability>();
             float durabilityVal = durability != null ? durability.CurrentDurability : 100f;
             
-            int occupied = assignedSpots.Count;
+            int occupied = chickensInside.Count;
             int total = GetMaxCapacity();
 
             string occupancyLabel = uiTexts != null ? uiTexts.occupancyLabel : string.Empty;
@@ -194,6 +202,47 @@ namespace GallinasFelices.Structures
             {
                 meshRenderer.material = currentConfig.material;
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (chickensInside.Count > 0)
+            {
+                ScatterChickens();
+            }
+        }
+
+        private void ScatterChickens()
+        {
+            float scatterRadius = gameBalance != null ? gameBalance.coopDestroyedScatterRadius : 8f;
+            float scatterForce = gameBalance != null ? gameBalance.coopDestroyedScatterForce : 1f;
+
+            List<Chicken.Chicken> chickensToScatter = new List<Chicken.Chicken>(chickensInside);
+
+            foreach (var chicken in chickensToScatter)
+            {
+                if (chicken != null)
+                {
+                    chicken.ShowVisual();
+
+                    Vector2 randomCircle = Random.insideUnitCircle * scatterRadius * scatterForce;
+                    Vector3 scatterOffset = new Vector3(randomCircle.x, 0f, randomCircle.y);
+                    Vector3 targetPosition = transform.position + scatterOffset;
+
+                    if (UnityEngine.AI.NavMesh.SamplePosition(targetPosition, out UnityEngine.AI.NavMeshHit hit, scatterRadius, UnityEngine.AI.NavMesh.AllAreas))
+                    {
+                        chicken.transform.position = hit.position;
+                    }
+                    else
+                    {
+                        chicken.transform.position = targetPosition;
+                    }
+
+                    chicken.ChangeState(Chicken.ChickenState.Idle);
+                }
+            }
+
+            chickensInside.Clear();
         }
     }
 }

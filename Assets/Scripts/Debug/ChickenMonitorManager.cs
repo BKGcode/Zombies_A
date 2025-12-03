@@ -22,14 +22,18 @@ namespace HappyChickens.Debug
 
         private List<ChickenDebugger> registeredChickens = new List<ChickenDebugger>();
         private List<TransitionLog> transitionHistory = new List<TransitionLog>();
+        private List<EventLog> eventHistory = new List<EventLog>();
         private const int MaxTransitionHistory = 100;
+        private const int MaxEventHistory = 200;
 
         public IReadOnlyList<ChickenDebugger> RegisteredChickens => registeredChickens;
         public IReadOnlyList<TransitionLog> TransitionHistory => transitionHistory;
+        public IReadOnlyList<EventLog> EventHistory => eventHistory;
 
         public event Action<ChickenDebugger> OnChickenRegistered;
         public event Action<ChickenDebugger> OnChickenUnregistered;
         public event Action<TransitionLog> OnTransitionLogged;
+        public event Action<EventLog> OnEventLogged;
 
         private void Awake()
         {
@@ -46,6 +50,13 @@ namespace HappyChickens.Debug
         {
             if (instance == this)
             {
+                registeredChickens.Clear();
+                transitionHistory.Clear();
+                eventHistory.Clear();
+                OnChickenRegistered = null;
+                OnChickenUnregistered = null;
+                OnTransitionLogged = null;
+                OnEventLogged = null;
                 instance = null;
             }
         }
@@ -88,6 +99,28 @@ namespace HappyChickens.Debug
             OnTransitionLogged?.Invoke(log);
             
             DetectAnomalies(log);
+        }
+
+        public void LogEvent(string chickenID, string eventType, string message, EventSeverity severity = EventSeverity.Info)
+        {
+            EventLog log = new EventLog
+            {
+                ChickenID = chickenID,
+                EventType = eventType,
+                Message = message,
+                Severity = severity,
+                Timestamp = Time.time,
+                TimeOfDay = DateTime.Now.ToString("HH:mm:ss")
+            };
+            
+            eventHistory.Add(log);
+            
+            if (eventHistory.Count > MaxEventHistory)
+            {
+                eventHistory.RemoveAt(0);
+            }
+            
+            OnEventLogged?.Invoke(log);
         }
 
         private void DetectAnomalies(TransitionLog newLog)
@@ -179,6 +212,7 @@ namespace HappyChickens.Debug
         public void ClearHistory()
         {
             transitionHistory.Clear();
+            eventHistory.Clear();
         }
     }
 
@@ -190,5 +224,24 @@ namespace HappyChickens.Debug
         public string ToState;
         public float Timestamp;
         public string TimeOfDay;
+    }
+
+    [Serializable]
+    public class EventLog
+    {
+        public string ChickenID;
+        public string EventType;
+        public string Message;
+        public EventSeverity Severity;
+        public float Timestamp;
+        public string TimeOfDay;
+    }
+
+    public enum EventSeverity
+    {
+        Info,
+        Warning,
+        Error,
+        Critical
     }
 }

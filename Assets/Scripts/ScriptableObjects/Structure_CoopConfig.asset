@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GallinasFelices.Data.CoopConfigSO
   level: 1
   levelName: "B\xE1sico"
-  sleepingSpots: 15
+  sleepingSpots: 5
   upgradeCost: 200
   nextLevel: {fileID: 0}
   material: {fileID: 0}

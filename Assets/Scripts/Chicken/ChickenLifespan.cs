@@ -57,6 +57,11 @@ namespace GallinasFelices.Chicken
 
         private void UpdateAge()
         {
+            if (chicken != null && chicken.VisualRoot != null && !chicken.VisualRoot.gameObject.activeSelf)
+            {
+                return;
+            }
+
             ageTimer += Time.deltaTime;
 
             if (ageTimer >= maxLifespanSeconds)
@@ -67,8 +72,12 @@ namespace GallinasFelices.Chicken
 
         private void UpdateNeglect()
         {
-            // Check if chicken is critically hungry or thirsty
-            // Assuming 100 is max need value. Adjust if needs are normalized differently.
+            if (chicken != null && chicken.VisualRoot != null && !chicken.VisualRoot.gameObject.activeSelf)
+            {
+                neglectTimer = 0f;
+                return;
+            }
+
             bool isStarving = needs.Hunger >= 100f;
             bool isDehydrated = needs.Thirst >= 100f;
 
@@ -82,7 +91,6 @@ namespace GallinasFelices.Chicken
             }
             else
             {
-                // Reset neglect timer if needs are met
                 neglectTimer = 0f;
             }
         }

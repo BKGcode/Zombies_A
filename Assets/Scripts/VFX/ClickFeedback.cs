@@ -10,41 +10,53 @@ namespace GallinasFelices.VFX
         [SerializeField] private float stretchAmount = 1.15f;
         [SerializeField] private float duration = 0.2f;
 
-        private Transform visualRoot;
+    private Transform visualRoot;
 
-        void Awake()
+    private void Start()
+    {
+        FindVisualRoot();
+    }
+
+    private void FindVisualRoot()
+    {
+        visualRoot = transform.Find("VisualRoot");
+        
+        if (visualRoot == null && transform.childCount > 0)
         {
-            visualRoot = transform.Find("VisualRoot");
-            
-            if (visualRoot == null && transform.childCount > 0)
+            for (int i = 0; i < transform.childCount; i++)
             {
-                for (int i = 0; i < transform.childCount; i++)
+                Transform child = transform.GetChild(i);
+                
+                if (!child.gameObject.activeInHierarchy)
+                    continue;
+                
+                if (child.name.Contains("Visual") || child.name.Contains("Model"))
                 {
-                    Transform child = transform.GetChild(i);
-                    if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<SkinnedMeshRenderer>() != null)
-                    {
-                        visualRoot = child;
-                        break;
-                    }
+                    visualRoot = child;
+                    break;
+                }
+                
+                if (child.GetComponent<MeshRenderer>() != null || child.GetComponent<SkinnedMeshRenderer>() != null)
+                {
+                    visualRoot = child;
+                    break;
                 }
             }
+        }
 
-            if (visualRoot == null)
+        if (visualRoot == null)
+        {
+            if (GetComponent<MeshRenderer>() != null || GetComponent<SkinnedMeshRenderer>() != null)
             {
-                if (GetComponent<MeshRenderer>() != null || GetComponent<SkinnedMeshRenderer>() != null)
-                {
-                    visualRoot = transform;
-                }
-            }
-
-            if (visualRoot == null)
-            {
-                Debug.LogWarning($"[ClickFeedback] No se encontró visual root en {gameObject.name}. Usando transform raíz.", this);
                 visualRoot = transform;
             }
         }
 
-        public void PlayFeedback()
+        if (visualRoot == null)
+        {
+            visualRoot = transform;
+        }
+    }        public void PlayFeedback()
         {
             visualRoot.DOKill();
             

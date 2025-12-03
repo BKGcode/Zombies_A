@@ -42,8 +42,12 @@ namespace GallinasFelices.Structures
             if (gameBalance == null)
             {
                 Debug.LogWarning($"[{gameObject.name}] GameBalanceSO not assigned!");
-                // Try to find it
                 gameBalance = FindObjectOfType<GameBalanceSO>();
+            }
+
+            if (currentCapacity <= 0f)
+            {
+                currentCapacity = MaxCapacity;
             }
 
             OnCapacityChanged?.Invoke(FillPercentage);

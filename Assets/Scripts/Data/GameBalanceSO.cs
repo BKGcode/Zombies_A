@@ -105,5 +105,17 @@ namespace GallinasFelices.Data
         [Tooltip("Penalización de lifespan por dormir fuera del coop (porcentaje por noche)")]
         [Range(0f, 0.2f)]
         public float sleepOutsideLifespanPenalty = 0.05f;
+        
+        [Tooltip("Multiplicador de pérdida de energía al dormir fuera (1.0 = normal, 2.0 = doble)")]
+        [Range(1f, 5f)]
+        public float sleepOutsideEnergyPenalty = 2f;
+        
+        [Header("Coop Destroyed Settings")]
+        [Tooltip("Radio de dispersión cuando se destruye un coop")]
+        public float coopDestroyedScatterRadius = 8f;
+        
+        [Tooltip("Fuerza del scatter (para teleport offset)")]
+        [Range(0.5f, 2f)]
+        public float coopDestroyedScatterForce = 1f;
     }
 }
