@@ -47,6 +47,31 @@ Escenas: SceneManager.LoadScene.
 Instanciación: Instantiate/Destroy.
 UI: TextMeshPro es obligatorio.
 Input: Nuevo Input System, con InputActionReference asignada en Inspector.
+
+SISTEMAS ESCALABLES (USAR SOLO SI HAY DOLOR CONCRETO)
+Empieza simple. Escala cuando duela. Para cuando funcione.
+Señales de que necesitas escalar (requiere 2+):
+- Refactorizas el mismo sistema 3+ veces
+- Cambiar A rompe B, C, D (modificación en cascada)
+- Copias/pegas lógica similar en 5+ lugares
+- Múltiples sistemas compiten por control de la misma entidad
+- FSM con 8+ estados o transiciones complejas
+- Imposible testear un comportamiento aislado
+
+Patrones permitidos para sistemas complejos:
+Controller Component: Un componente orquesta 3+ subsistemas independientes. Controller decide, no ejecuta lógica. Subsistemas exponen API pública simple (3-5 métodos). Subsistemas NO se conocen entre sí.
+Behavior Components: Entity base + componentes opcionales. Máx 3-4 behaviors activos. Behaviors usan API pública, no acceden a internals.
+State Machine Externalizada: Para FSM con 8+ estados. Estados son clases separadas. Entity expone datos via propiedades. StateMachine solo gestiona transiciones.
+Event Bus Local: Para 4+ sistemas reaccionando al mismo evento. NO global, vive en GameObject/Manager específico. Eventos tipados, no strings. Register en OnEnable, unregister en OnDisable.
+
+Prohibido incluso en sistemas complejos:
+- Singletons para acceso global (usa referencias Inspector)
+- Reflection en runtime
+- Strings mágicos (usa enums/const)
+- Herencia >3 niveles
+- God Objects (managers que hacen todo)
+- Update() que gestiona 10+ subsistemas
+
 SISTEMAS OPT-IN (USAR SOLO CON JUSTIFICACIÓN)
 Addressables: Úsalo solo para carga/descarga dinámica de assets o escenas aditivas. Gestiona la cancelación (CancellationTokenSource) y libera siempre los handles.
 ScriptableObjects (SO): Para datos compartidos o configuraciones complejas. Nunca para estado de runtime mutable (si se necesita, el estado se guarda en un contenedor que lee el SO).

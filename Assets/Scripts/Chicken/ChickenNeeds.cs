@@ -47,12 +47,12 @@ namespace GallinasFelices.Chicken
 
         public bool IsHungry()
         {
-            return hunger > 60f;
+            return hunger > 70f;
         }
 
         public bool IsThirsty()
         {
-            return thirst > 60f;
+            return thirst > 70f;
         }
 
         public bool IsTired()

@@ -69,7 +69,10 @@ namespace GallinasFelices.Chicken
 
         private void Update()
         {
-            if (chicken.CurrentState == ChickenState.Sleeping)
+            if (chicken.CurrentState == ChickenState.Sleeping ||
+                chicken.CurrentState == ChickenState.GoingToNest ||
+                chicken.CurrentState == ChickenState.LayingEgg ||
+                chicken.CurrentState == ChickenState.GoingToSleep)
             {
                 return;
             }
@@ -84,14 +87,9 @@ namespace GallinasFelices.Chicken
                 retryTimer -= Time.deltaTime;
                 if (retryTimer <= 0f)
                 {
+                    waitingForNest = false;
                     TryProduceEgg();
                 }
-                return;
-            }
-
-            if (chicken.CurrentState == ChickenState.GoingToNest || 
-                chicken.CurrentState == ChickenState.LayingEgg)
-            {
                 return;
             }
 
@@ -112,6 +110,13 @@ namespace GallinasFelices.Chicken
         {
             if (chicken.CurrentState == ChickenState.LayingEgg || chicken.CurrentState == ChickenState.GoingToNest)
             {
+                return;
+            }
+            
+            if (chicken.Needs.Hunger >= 80f || chicken.Needs.Thirst >= 80f)
+            {
+                waitingForNest = true;
+                retryTimer = Random.Range(retryDelay * 0.8f, retryDelay * 1.2f);
                 return;
             }
 
@@ -147,9 +152,18 @@ namespace GallinasFelices.Chicken
         public void OnReachedNest()
         {
             chicken.GetComponent<HappyChickens.Debug.ChickenDebugger>()?.LogEvent("EggProduction", "Reached nest. Starting to lay egg", HappyChickens.Debug.EventSeverity.Info);
-            chicken.StartLayingEgg();
-            OnProductionStarted?.Invoke();
+            
+            chicken.OnStateChanged.RemoveListener(OnChickenStateChanged);
             chicken.OnStateChanged.AddListener(OnChickenStateChanged);
+            
+            chicken.ChangeState(ChickenState.LayingEgg);
+            
+            float duration = chicken.Personality != null
+                ? Random.Range(chicken.Personality.minLayingEggDuration, chicken.Personality.maxLayingEggDuration)
+                : Random.Range(4f, 7f);
+            chicken.SetStateTimer(duration);
+            
+            OnProductionStarted?.Invoke();
         }
 
         public void CancelEggProduction()
@@ -242,8 +256,7 @@ namespace GallinasFelices.Chicken
         {
             Gizmos.color = Color.magenta;
             
-            Nest[] allNests = FindObjectsOfType<Nest>();
-            foreach (var nest in allNests)
+            foreach (var nest in cachedNests)
             {
                 if (nest != null)
                 {

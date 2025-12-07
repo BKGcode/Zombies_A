@@ -28,12 +28,16 @@ namespace GallinasFelices.Structures
             {
                 Debug.LogWarning("[Coop] Entry point not assigned! Using coop position as fallback.");
             }
+
+            Chicken.ChickenStructureCache.RegisterCoop(this);
         }
 
         public bool HasAvailableSpot()
         {
             return chickensInside.Count < GetMaxCapacity();
         }
+
+        public bool IsFull => chickensInside.Count >= GetMaxCapacity();
 
         private int GetMaxCapacity()
         {
@@ -55,6 +59,7 @@ namespace GallinasFelices.Structures
                 
                 if (chicken.CurrentState == Chicken.ChickenState.GoingToSleep)
                 {
+                    chicken.ChangeState(Chicken.ChickenState.Sleeping);
                     HideChickenWithAnimation(chicken);
                 }
             }
@@ -206,6 +211,8 @@ namespace GallinasFelices.Structures
 
         private void OnDestroy()
         {
+            Chicken.ChickenStructureCache.UnregisterCoop(this);
+
             if (chickensInside.Count > 0)
             {
                 ScatterChickens();

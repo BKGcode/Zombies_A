@@ -43,7 +43,7 @@ namespace GallinasFelices.Data
         [Tooltip("Percentage decay per minute from time")]
         public float structureTimeDecayRate = 1f;
         [Tooltip("Percentage decay per use action")]
-        public float structureUseDecayAmount = 0.1f;
+        public float structureUseDecayAmount = 0.05f;
 
 
 

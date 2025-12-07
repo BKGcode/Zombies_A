@@ -10,22 +10,34 @@ namespace GallinasFelices.Structures
         [SerializeField] private Data.WaterTroughConfigSO currentConfig;
         [SerializeField] private MeshRenderer meshRenderer;
 
+        protected override void Start()
+        {
+            base.Start();
+            ChickenStructureCache.RegisterWaterTrough(this);
+        }
+
+        private void OnDestroy()
+        {
+            ChickenStructureCache.UnregisterWaterTrough(this);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent<Chicken.Chicken>(out var chicken))
             {
                 chicken.GetComponent<HappyChickens.Debug.ChickenDebugger>()?.LogEvent("Drinking", $"Entered water trough trigger. State:{chicken.CurrentState} Capacity:{CurrentCapacity:F0}", HappyChickens.Debug.EventSeverity.Info);
                 
-                if (chicken.CurrentState == ChickenState.Drinking && !IsEmpty)
+                if (chicken.CurrentState == ChickenState.GoingToDrink && !IsEmpty)
                 {
                     if (TryStartUsing())
                     {
-                        TryConsume(0); // Amount is handled by GameBalanceSO in base class
+                        chicken.SetCurrentStructure(this);
+                        chicken.ChangeState(ChickenState.Drinking);
+                        
                         chicken.OnStateChanged.AddListener((newState) => OnChickenStateChanged(chicken, newState));
                     }
                     else
                     {
-                        // Structure is full, chicken should abort drinking
                         chicken.ChangeState(ChickenState.Idle);
                     }
                 }

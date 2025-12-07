@@ -161,7 +161,7 @@ Actúa como un Senior Unity Developer especializado en QA y Debugging. Realiza u
 
 Tu objetivo es encontrar casos de borde donde la lógica se rompa, se bloquee o genere errores.
 
-Analiza paso a paso los siguientes vectores de fallo:
+- Analiza paso a paso los siguientes vectores de fallo:
 
 Concurrencia y Solapamiento: Simula que las acciones X, Y, Z se ejecutan en el mismo frame. ¿Se corrompen los datos? ¿Quién tiene prioridad?
 

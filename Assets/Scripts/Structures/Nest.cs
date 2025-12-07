@@ -45,6 +45,26 @@ namespace GallinasFelices.Structures
             ChickenEggProducer.UnregisterNest(this);
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            GallinasFelices.Chicken.Chicken chicken = other.GetComponent<GallinasFelices.Chicken.Chicken>();
+            if (chicken == null || chicken.CurrentState != ChickenState.GoingToNest)
+            {
+                return;
+            }
+
+            if (isOccupied || (durability != null && durability.IsBroken))
+            {
+                return;
+            }
+
+            ChickenEggProducer producer = chicken.GetComponent<ChickenEggProducer>();
+            if (producer != null)
+            {
+                producer.OnReachedNest();
+            }
+        }
+
         public bool TryOccupy()
         {
             if (isOccupied)
